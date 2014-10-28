@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block head %}
+      <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Sensing, Connecting<small></small></h1>
+  <blockquote class="bg-info">
+  <span class="label label-primary">[[data.clients]]</span> clients connecting <br>
+  <p id="data">
+  </p>
+  </blockquote>
+<!--   <div id="panel" class="row">
+    <div class="form-group col-sm-3">
+          <label>Averaging times:</label>
+          <select class="form-control" ng-model="avewindow" ng-change="changeAve()">
+            <option>1</option>
+            <option>10</option>
+            <option>40</option>
+            <option>100</option>
+          </select>
+
+          <label>Y-axis Range: <span class="badge">[[range]] Pa</span></label>
+          <input type="range" name="points" min="10" max="1000" step="20" ng-model="range">
+          <label>Center Value:</label>
+          <input type="number" class="form-control" ng-model="middle">
+    </div>
+  </div> -->
+</div>
+<div class="panel panel-default col-sm-6 panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">Thermal comfort</h3>
+  </div>
+  <div  class="panel-body"  id="pmv">
+</div>
+</div>
+<div class="panel panel-default col-sm-6 panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">Radiant temperature</h3>
+  </div>
+  <div  class="panel-body" id="radi">
+  </div>
+</div>
+<div class="panel panel-default col-sm-4 panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Brightness</h3>
+  </div>
+  <div  class="panel-body" id="light">
+[[data.light]]
+</div>
+</div>
+<div class="panel panel-default col-sm-4 panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Air pressure</h3>
+  </div>
+  <div  class="panel-body" id="pres">
+[[data.pres]]
+</div>
+</div>
+<div class="panel panel-default col-sm-4 panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Air flow</h3>
+  </div>
+  <div  class="panel-body" id="flow">
+X:[[data.flowX]] Y:[[data.flowY]]
+</div>
+</div>
+<div class="panel panel-default col-sm-4  panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title">Humidity</h3>
+  </div>
+  <div  class="panel-body" id="humi">
+[[data.humi]]
+</div>
+</div>
+<div class="panel panel-default col-sm-4 panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title">Thermography</h3>
+  </div>
+  <div  class="panel-body" id="ir">
+    <div ng-repeat="n in data.ir track by $index" class="heatmap col-xs-3" ng-class=" {'bg-info': data.ir[$index] <= 26, 'bg-warning': data.ir[$index] > 26 &&data.ir[$index] <=29, 'bg-danger': data.ir[$index] > 29}"> </div>
+</div>
+</div>
+<div class="panel panel-default col-sm-4 panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title">Sensor Battery Voltage</h3>
+  </div>
+  <div  class="panel-body" id="bat">
+[[data.bat]]
+</div>
+</div>
+<div id="log"></div>
+{% endblock %}
