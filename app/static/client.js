@@ -185,7 +185,7 @@ function drawRadi() {
       .attr("transform", "translate(" + x2(now - (n - 1) * duration) + ")")
       .each("end", drawRadi);
 
-charay = height - (data[24] - 24)/12*height -18;
+charay = height - (data[24] - 24)/12*height - 50;
 d3.select("#charap").transition()
         .duration(100)
         .attr("x",width /2 - 15)
