@@ -8,7 +8,7 @@ import math
 import numpy as np
 
 RESP_HEAD = binascii.a2b_hex("4C")
-module = 1
+module = 2
 if module == 1: #USB
     bufSize = 54
     pmvH = 2

@@ -24,11 +24,12 @@ def listening():
         head = binascii.a2b_hex("4C")
         serialRequest(ser)
         rcv = ser.read(bufSize)
+        # print rcv
         seq = map(ord,rcv)
         buf = copy.copy(seq)
         pkt = parsePkt(seq)
         pkt['clients'] = clients
-        print pkt
+        # print pkt
         socketio.emit('push', json.dumps(pkt), namespace='/main')
         # time.sleep(5)
     ser.close()
