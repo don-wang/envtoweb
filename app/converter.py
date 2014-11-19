@@ -8,7 +8,7 @@ import math
 import numpy as np
 
 RESP_HEAD = binascii.a2b_hex("4C")
-module = 2
+module = 1
 if module == 1: #USB
     bufSize = 54
     pmvH = 2
@@ -94,7 +94,7 @@ def parsePkt(seq):
     pkt['pres'] = combineHL(seq[presH], seq[presL]) / 10.0
     pkt['flowX'] = combineHL(seq[flowXH], seq[flowXL]) / 1000.0
     pkt['flowY'] = combineHL(seq[flowYH], seq[flowYL]) / 1000.0
-    pkt['flowV'] = math.sqrt(pkt['flowX'] * pkt['flowX'] + pkt['flowY'] * pkt['flowY'])
+    pkt['flowV'] = math.floor(math.sqrt(pkt['flowX'] * pkt['flowX'] + pkt['flowY'] * pkt['flowY']) * 100)/100
     pkt['radi'] = combineHL(seq[radiH], seq[radiL]) / 100.0
     pkt['ir'] = []
     for x in xrange(0,16):

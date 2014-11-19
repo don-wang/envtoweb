@@ -45,6 +45,17 @@ def index():
     return render_template("index.html",
         title = 'Sensing via Web')
 
+@socketio.on('controlTV', namespace='/main')
+def change(status):
+    print "TV"
+
+@socketio.on('controlLight', namespace='/main')
+def change(status):
+    print status
+
+@socketio.on('controlAC', namespace='/main')
+def change(status):
+    print status
 
 @socketio.on('my event')
 def test_message(message):
