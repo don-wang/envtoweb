@@ -49,7 +49,7 @@ app.controller('Ctrl', function($scope, socket) {
 // PMV
   var pi = Math.PI; var iR=80;  var oR=120;
   var margin = {top: 20, right: 5, bottom: 20, left: 5},
-    width = 380 - margin.left - margin.right,
+    width = 340 - margin.left - margin.right,
     height = 280 - margin.top - margin.bottom;
   var cur_color = 'limegreen';  var new_color, hold;
   var max = 4, min = 0, current = 0;
@@ -69,7 +69,7 @@ app.controller('Ctrl', function($scope, socket) {
               .attr("text-anchor", "middle").style("font-size", "50").style("font-family", "Helvetica").text(current)
   // Update every x seconds
   setInterval(function() {
-  pmv = $scope.data.pmv;
+  pmv = $scope.data.pmv?$scope.data.pmv:0;
   pmv = pmv > 4?4:pmv;
   pmv = pmv < 0?0:pmv;
   var num = pmv; var numPi = (num - 2)  * (pi/4);// Get value
@@ -95,7 +95,7 @@ var n = 50,
     count = 0,
     data = d3.range(n).map(function() { return 0; });
 var margin = {top: 20, right: 30, bottom: 20, left: 10},
-    width = 340 - margin.left - margin.right,
+    width = 320 - margin.left - margin.right,
     height = 240 - margin.top - margin.bottom;
 
 // Radi

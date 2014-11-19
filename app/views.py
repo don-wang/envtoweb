@@ -11,32 +11,43 @@ import datetime
 import time
 
 import json
+import glob
+
 
 from converter import *
 
+def scan():
+    return glob.glob('/dev/ttyUSB*') + glob.glob('/dev/ttyACM*')
+
+sensor = '/dev/ttyUSB0'
 clients = 0
 
 def listening():
-    ser = serial.Serial('/dev/ttyUSB0', 38400)
-
-    global clients
     while True:
-        head = binascii.a2b_hex("4C")
-        serialRequest(ser)
-        rcv = ser.read(bufSize)
-        # print rcv
-        seq = map(ord,rcv)
-        buf = copy.copy(seq)
-        pkt = parsePkt(seq)
-        pkt['clients'] = clients
-        # print pkt
-        socketio.emit('push', json.dumps(pkt), namespace='/main')
-        # time.sleep(5)
-    ser.close()
+        ports = scan()
+        if sensor in ports:
+            ser = serial.Serial(sensor, 38400)
+
+            global clients
+            while True:
+                head = binascii.a2b_hex("4C")
+                serialRequest(ser)
+                rcv = ser.read(bufSize)
+                seq = map(ord,rcv)
+                buf = copy.copy(seq)
+                pkt = parsePkt(seq)
+                pkt['clients'] = clients
+                #print pkt
+                socketio.emit('push', json.dumps(pkt), namespace='/main')
+                # time.sleep(5)
+            ser.close()
+        else:
+            print "Device " + sensor + " not found, wait for operation"
+        time.sleep(30)
 
 # Open new thread for Listening function
 listen = Thread(target=listening,name="ListenSensor")
-# listen.daemon = True
+listen.daemon = True
 
 
 @app.route('/')
