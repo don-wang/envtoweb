@@ -5,7 +5,7 @@ from app import app
 from flask.ext.socketio import send, emit
 from app import socketio
 from threading import Thread, current_thread
-
+from lirc.lirc import Lirc
 # import binascii
 import datetime
 import time
@@ -21,8 +21,18 @@ def scan():
 
 sensor = '/dev/ttyUSB0'
 clients = 0
-
+newTask = {"update": False}
+lircParse = Lirc('/etc/lirc/lircd.conf')
+devices = []
+for dev in lircParse.devices():
+    d = {
+        'id': dev,
+        'name': dev,
+    }
+    devices.append(d)
+# lircParse.send_once("livingroom", "KEY_1")
 def listening():
+    global newTask
     while True:
         ports = scan()
         if sensor in ports:
@@ -34,9 +44,55 @@ def listening():
                 serialRequest(ser)
                 rcv = ser.read(bufSize)
                 seq = map(ord,rcv)
+                if seq[0] != 15 and seq[1] != 90:
+                    continue
                 buf = copy.copy(seq)
                 pkt = parsePkt(seq)
                 pkt['clients'] = clients
+                print newTask
+                taskValue =0
+                if newTask['update'] == True:
+                    if newTask['condition'] == "0":
+                        taskValue = pkt['light']
+                    elif newTask['condition'] == "1":
+                        taskValue = pkt['radi']
+                    elif newTask['condition'] == "2":
+                        taskValue = pkt['flowV']
+
+                    print newTask['trigger']
+                    if int(newTask['trigger']) == 1:
+                        print taskValue
+                        if taskValue >= int(newTask['value']):
+                            print taskValue, int(newTask['value'])
+                            if newTask['tv'] == True:
+                                lircParse.send_once("tv", "KEY_1")
+                                print ">tv"
+                                time.sleep(1)
+                            if newTask['light'] == True:
+                                lircParse.send_once("light", "KEY_2")
+                                print ">light"
+                                time.sleep(1)
+                            if newTask['aircon'] == True:
+                                lircParse.send_once("aircon", "KEY_2")
+                                print ">air"
+                                time.sleep(1)
+                            newTask['update'] = False
+
+                #print pkt
+                    if int(newTask['trigger']) == 0:
+                        print taskValue
+                        if taskValue < int(newTask['value']):
+                            print taskValue, int(newTask['value'])
+                            if newTask['tv'] == True:
+                                lircParse.send_once("tv", "KEY_1")
+                                print "<tv"
+                            if newTask['light'] == True:
+                                lircParse.send_once("light", "KEY_2")
+                                print "<light"
+                            if newTask['aircon'] == True:
+                                lircParse.send_once("aircon", "KEY_2")
+                                print "<aircon"
+                            newTask['update'] = False
                 #print pkt
                 socketio.emit('push', json.dumps(pkt), namespace='/main')
                 # time.sleep(5)
@@ -58,15 +114,43 @@ def index():
 
 @socketio.on('controlTV', namespace='/main')
 def change(status):
-    print "TV"
+    print "tv"
+    print status
+    if status == False:
+        print "off"
+        lircParse.send_once("tv", "KEY_3")
+    elif status == True:
+        lircParse.send_once("tv", "KEY_1")
+        print "on"
 
 @socketio.on('controlLight', namespace='/main')
 def change(status):
-    print status
+    print "light"
+    print type(status)
+    if status == 0:
+        print "off"
+        lircParse.send_once("light", "KEY_1")
+    elif status == 1:
+        lircParse.send_once("light", "KEY_2")
+        print "half"
+    elif status == 2:
+        lircParse.send_once("light", "KEY_3")
+        print "on"
 
 @socketio.on('controlAC', namespace='/main')
 def change(status):
-    print status
+    print "ac", status
+    if status == 0:
+        lircParse.send_once("aircon", "KEY_1")
+    elif status == 1:
+        lircParse.send_once("aircon", "KEY_2")
+
+@socketio.on('task', namespace='/main')
+def change(task):
+    global newTask
+    newTask = task
+    newTask['update'] = True
+    print "newTask"
 
 @socketio.on('my event')
 def test_message(message):
