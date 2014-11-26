@@ -68,13 +68,19 @@ def listening():
                                 lircParse.send_once("tv", "KEY_1")
                                 print ">tv"
                                 time.sleep(1)
+                                lircParse.send_once("tv", "KEY_1")
+                                time.sleep(1)
                             if newTask['light'] == True:
                                 lircParse.send_once("light", "KEY_2")
                                 print ">light"
                                 time.sleep(1)
+                                lircParse.send_once("light", "KEY_2")
+                                time.sleep(1)
                             if newTask['aircon'] == True:
                                 lircParse.send_once("aircon", "KEY_2")
                                 print ">air"
+                                time.sleep(1)
+                                lircParse.send_once("aircon", "KEY_2")
                                 time.sleep(1)
                             newTask['update'] = False
 
@@ -85,12 +91,21 @@ def listening():
                             print taskValue, int(newTask['value'])
                             if newTask['tv'] == True:
                                 lircParse.send_once("tv", "KEY_1")
+                                time.sleep(1)
+                                lircParse.send_once("tv", "KEY_1")
+                                time.sleep(1)
                                 print "<tv"
                             if newTask['light'] == True:
                                 lircParse.send_once("light", "KEY_2")
+                                time.sleep(1)
+                                lircParse.send_once("light", "KEY_2")
+                                time.sleep(1)
                                 print "<light"
                             if newTask['aircon'] == True:
                                 lircParse.send_once("aircon", "KEY_2")
+                                time.sleep(1)
+                                lircParse.send_once("aircon", "KEY_2")
+                                time.sleep(1)
                                 print "<aircon"
                             newTask['update'] = False
                 #print pkt
@@ -119,7 +134,11 @@ def change(status):
     if status == False:
         print "off"
         lircParse.send_once("tv", "KEY_3")
+        time.sleep(1)
+        lircParse.send_once("tv", "KEY_3")
     elif status == True:
+        lircParse.send_once("tv", "KEY_1")
+        time.sleep(1)
         lircParse.send_once("tv", "KEY_1")
         print "on"
 
@@ -130,10 +149,16 @@ def change(status):
     if status == 0:
         print "off"
         lircParse.send_once("light", "KEY_1")
+        time.sleep(1)
+        lircParse.send_once("light", "KEY_1")
     elif status == 1:
+        lircParse.send_once("light", "KEY_2")
+        time.sleep(1)
         lircParse.send_once("light", "KEY_2")
         print "half"
     elif status == 2:
+        lircParse.send_once("light", "KEY_3")
+        time.sleep(1)
         lircParse.send_once("light", "KEY_3")
         print "on"
 
@@ -142,7 +167,11 @@ def change(status):
     print "ac", status
     if status == 0:
         lircParse.send_once("aircon", "KEY_1")
+        time.sleep(1)
+        lircParse.send_once("aircon", "KEY_1")
     elif status == 1:
+        lircParse.send_once("aircon", "KEY_2")
+        time.sleep(1)
         lircParse.send_once("aircon", "KEY_2")
 
 @socketio.on('task', namespace='/main')
