@@ -13,7 +13,7 @@ import time
 import json
 import glob
 
-
+# import converter
 from converter import *
 
 def scan():
@@ -31,6 +31,7 @@ for dev in lircParse.devices():
     }
     devices.append(d)
 # lircParse.send_once("livingroom", "KEY_1")
+
 def listening():
     global newTask
     while True:
@@ -39,15 +40,21 @@ def listening():
             ser = serial.Serial(sensor, 38400)
 
             global clients
+
+            
             while True:
                 head = binascii.a2b_hex("4C")
+                time.sleep(1)
                 serialRequest(ser)
                 rcv = ser.read(bufSize)
                 seq = map(ord,rcv)
                 if seq[0] != 15 and seq[1] != 90:
                     continue
                 buf = copy.copy(seq)
+
                 pkt = parsePkt(seq)
+
+
                 pkt['clients'] = clients
                 print newTask
                 taskValue =0
@@ -110,7 +117,6 @@ def listening():
                             newTask['update'] = False
                 #print pkt
                 socketio.emit('push', json.dumps(pkt), namespace='/main')
-                # time.sleep(5)
             ser.close()
         else:
             print "Device " + sensor + " not found, wait for operation"

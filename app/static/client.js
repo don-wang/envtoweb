@@ -52,7 +52,7 @@ app.controller('Ctrl', function($scope, socket) {
     width = 340 - margin.left - margin.right,
     height = 280 - margin.top - margin.bottom;
   var cur_color = 'limegreen';  var new_color, hold;
-  var max = 4, min = 0, current = 0;
+  var max = 30, min = 15, current = 0;
   var arc = d3.svg.arc().innerRadius(iR).outerRadius(oR).startAngle(-90 * (pi/180)); // Arc Defaults
   // Place svg element
   var svg = d3.select("#pmv").append("svg").attr("width", width).attr("height", height)
@@ -65,16 +65,16 @@ app.controller('Ctrl', function($scope, socket) {
   var min = svg.append("text").attr("transform", "translate("+ -(iR + ((oR - iR)/2)) +",15)") // Set between inner and outer Radius
               .attr("text-anchor", "middle").style("font-family", "Helvetica").text(min)
   // Display Current value
-  var current = svg.append("text").attr("transform", "translate(0,"+ -(iR/4) +")") // Push up from center 1/4 of innerRadius
+  var current = svg.append("text").attr("transform", "translate(0,"+ -(iR/15) +")") // Push up from center 1/4 of innerRadius
               .attr("text-anchor", "middle").style("font-size", "50").style("font-family", "Helvetica").text(current)
   // Update every x seconds
   setInterval(function() {
-  pmv = $scope.data.pmv?$scope.data.pmv:0;
-  pmv = pmv > 4?4:pmv;
-  pmv = pmv < 0?0:pmv;
-  var num = pmv; var numPi = (num - 2)  * (pi/4);// Get value
-  if(num  < 1) {new_color = 'limegreen';} else if(num  < 2 && num > 1) {new_color = 'orange';} else {new_color = 'red';} // Get new color
-  current.transition().text(pmv);// Text transition
+  temp = $scope.data.temp?$scope.data.temp:0;
+  temp = temp > 30?30:temp;
+  temp = temp < 15?15:temp;
+  var num = temp; var numPi = (num - 15)  * (pi/30);// Get value
+  if(num  < 15) {new_color = 'limegreen';} else if(num  < 27 && num > 20) {new_color = 'orange';} else {new_color = 'red';} // Get new color
+  current.transition().text(temp);// Text transition
   // max.transition().text(Math.floor($scope.middle + $scope.range/2));// Text transition
   // min.transition().text(Math.floor($scope.middle - $scope.range/2));// Text transition
   // Arc Transition
@@ -87,6 +87,33 @@ app.controller('Ctrl', function($scope, socket) {
     transition.attrTween("d", function(d) {var interpolate = d3.interpolate(d.endAngle, newAngle);
               return function(t) {d.endAngle = interpolate(t);  return arc(d);  };  }); } // Update animation
 
+    //Brightness
+    var winWidth = window.innerWidth;
+    var canvBrightness = document.getElementById("canvBrightness");
+    canvBrightness.setAttribute("width", 340 - 60);
+    canvBrightness.setAttribute("height", 120);
+    // canv.setAttribute("style", "margin: 0 10px");
+    var smoothieFlow = new SmoothieChart({
+      grid: { strokeStyle:'white', fillStyle:'black',
+              lineWidth: 1, millisPerLine: 5000, verticalSections: 2, },
+      labels: { fillStyle:'white', fontSize:24 },
+      maxValue:1000,
+      minValue: 0
+    });
+    // Data
+    var lineFlow = new TimeSeries();
+
+    // Add a random value to each line every second
+    setInterval(function() {
+      lineFlow.append(new Date().getTime(), $scope.data.light);
+      // line2.append(new Date().getTime(), Math.random());
+    }, 1000);
+
+    // Add to SmoothieChart
+    smoothieFlow.addTimeSeries(lineFlow,
+  { strokeStyle:'rgb(250,250,250)', fillStyle:'rgba(250,250,250, 0.4)', lineWidth:3 });
+
+    smoothieFlow.streamTo(canvBrightness, 100);
 
 // Temp
 var n = 50,

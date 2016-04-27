@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Sensing, Connecting<small></small></h1>
+  <a name="demo"></a><h1>Integreated Sensor Network<small></small></h1>
   <blockquote class="bg-info">
   <span class="label label-primary">[[data.clients]]</span> clients connecting <br>
   <p id="data">
@@ -28,51 +28,20 @@
     </div>
   </div> -->
 </div>
-<div class="panel panel-default col-sm-6 panel-success">
+
+<div class="panel panel-default col-sm-4 panel-success">
   <div class="panel-heading">
-    <h3 class="panel-title">Thermal comfort</h3>
+    <h3 class="panel-title">Temperature</h3>
   </div>
   <div  class="panel-body"  id="pmv">
 </div>
 </div>
-<div class="panel panel-default col-sm-6 panel-success">
+<div class="panel panel-default col-sm-4 panel-success">
   <div class="panel-heading">
-    <h3 class="panel-title">Radiant temperature</h3>
+    <h3 class="panel-title">Radiant temperature <span class="label label-primary ng-binding">[[data.radi]]</span></h3>
   </div>
   <div  class="panel-body" id="radi">
   </div>
-</div>
-<div class="panel panel-default col-sm-4 panel-info">
-  <div class="panel-heading">
-    <h3 class="panel-title">Brightness</h3>
-  </div>
-  <div  class="panel-body" id="light">
-[[data.light]]
-</div>
-</div>
-<div class="panel panel-default col-sm-4 panel-info">
-  <div class="panel-heading">
-    <h3 class="panel-title">Air pressure</h3>
-  </div>
-  <div  class="panel-body" id="pres">
-[[data.pres]]
-</div>
-</div>
-<div class="panel panel-default col-sm-4 panel-info">
-  <div class="panel-heading">
-    <h3 class="panel-title">Air flow</h3>
-  </div>
-  <div  class="panel-body" id="flow">
-X:[[data.flowX]] Y:[[data.flowY]]
-</div>
-</div>
-<div class="panel panel-default col-sm-4  panel-warning">
-  <div class="panel-heading">
-    <h3 class="panel-title">Humidity</h3>
-  </div>
-  <div  class="panel-body" id="humi">
-[[data.humi]]
-</div>
 </div>
 <div class="panel panel-default col-sm-4 panel-warning">
   <div class="panel-heading">
@@ -82,13 +51,58 @@ X:[[data.flowX]] Y:[[data.flowY]]
     <div ng-repeat="n in data.ir track by $index" class="heatmap col-xs-3" ng-class=" {'bg-info': data.ir[$index] <= 26, 'bg-warning': data.ir[$index] > 26 &&data.ir[$index] <=29, 'bg-danger': data.ir[$index] > 29}"> </div>
 </div>
 </div>
+
+<div class="panel panel-default col-sm-4 panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="fa fa-sun-o" aria-hidden="true"></i> Brightness</h3>
+  </div>
+  <div  class="panel-body" id="light">
+<span class="label label-primary ng-binding">[[data.light]]</span>
+      <canvas id="canvBrightness" ></canvas>
+</div>
+</div>
+<div class="panel panel-default col-sm-4 panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="fa fa-leaf" aria-hidden="true"></i> Air pressure</h3>
+  </div>
+  <div  class="panel-body" id="pres">
+<span class="label label-primary ng-binding">[[data.pres]]</span>
+</div>
+</div>
+
+<div class="panel panel-default col-sm-4  panel-warning">
+  <div class="panel-heading">
+    <h3 class="panel-title"><i class="fa fa-tint" aria-hidden="true"></i> Humidity</h3>
+  </div>
+  <div  class="panel-body" id="humi">
+<span class="label label-primary ng-binding">[[data.humi]]</span>
+</div>
+</div>
+
 <div class="panel panel-default col-sm-4 panel-warning">
   <div class="panel-heading">
-    <h3 class="panel-title">Sensor Battery Voltage</h3>
+    <h3 class="panel-title"><i class="fa fa-battery-half" aria-hidden="true"></i> Sensor Battery Voltage</h3>
   </div>
   <div  class="panel-body" id="bat">
-[[data.bat]]
+<span class="label label-primary ng-binding">[[data.bat]]</span>
 </div>
 </div>
+<div class="col-sm-6 col-md-5">
+<a name="concept"></a>
+    <div class="thumbnail">
+      <img src="{{ url_for('static', filename='img/concept.png') }}" alt="...">
+      <div class="caption">
+        <h3>Understand and Support Your Activity</h3>
+        <p>
+        <ul>
+        <li>Integrated Sensor Network Deployment</li>
+        <li>Service & Application Interface</li>
+        <li>Activity Support</li>
+        </ul>
+        </p>
+        <!-- <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p> -->
+      </div>
+    </div>
+  </div>
 <div id="log"></div>
 {% endblock %}

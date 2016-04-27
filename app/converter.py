@@ -86,6 +86,7 @@ def meterFromPa(pa):
 
 
 def parsePkt(seq):
+    print seq
     pkt = {}
     pkt['pmv'] = combineHL(seq[pmvH], seq[pmvL]) / 100.0
     pkt['temp'] = combineHL(seq[tempH], seq[tempL]) / 100.0
@@ -105,3 +106,5 @@ def parsePkt(seq):
 
     return pkt
 
+def test(a):
+    print a

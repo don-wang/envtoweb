@@ -13,12 +13,14 @@
         <!-- <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}"> -->
     {% endblock %}
     <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Play' rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="{{ url_for('static', filename='angular.min.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='socket.io.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='d3.v3.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-1.4.2.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='client.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='smoothie.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='ui-bootstrap-tpls-0.9.0.min.js') }}"></script>
 	<script type="text/javascript" charset="utf-8">
     </script>
@@ -33,11 +35,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/">Sensing via Web</a>
+              <a class="navbar-brand" href="/">Creato!</a>
             </div>
             <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Home</a></li>
+            <li class="active"><a href="#demo">Demo</a></li>
+            <li><a href="#concept">Concept</a></li>
           </ul>
             </div>
       </div>
